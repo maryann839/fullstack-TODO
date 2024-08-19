@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <title>Todo web</title>
+    </head>
+    <body>
+        <header>
+            <div>
+                <div class="menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                <h1>TODO</h1> 
+            </div>
+        </header>
+        <main>
+            
+            <!-- Menu section --> 
+            <section class="menu-section">
+                <div class="menu-container">
+                    <div class="menu-div">
+                        <h3>Menu</h3>
+                    </div>
+                    <div class="menu-bar">
+                      <ul>
+                        <li><i class="fa-solid fa-list-ol" style="color: purple;"></i><button>My Task</button> </li>
+                        <li><i class="fa-solid fa-star" style="color: greenyellow;"></i></i><button>Today</button></li>
+                        <li><i class="fa-solid fa-forward" style="color: rgb(77, 167, 92);"></i><button>Upcoming</button></li>
+                        <li><i class="fa-regular fa-calendar-days" style="color: rgb(167, 38, 98);"></i><button>Overdue</button></li>
+                      </ul>
+                    </div> 
+                </div>
+            </section>
+            <!-- End of menu section-->
+
+            <!-- outputs section-->
+            <!-- My Tasks section-->
+            <section class="my-task-section" id="my-task-link">
+                <div class="my-task-container">
+                    <h2>My Tasks:</h2>
+                    
+                    <div class="my-task-input">
+                        <div>
+                                <form action="{{url_for('Searched') }}" class="search" method="GET"> 
+                                    
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <input id="Search-bar" type="text"  placeholder="Search" aria-label="searched" name="Searched">
+                                    <button class="search-btn">go</button>
+                            </form>
+                                <div>
+                                <button class="add-btn">+ Add new task</button> 
+                                </div>
+
+                                {% block content %}
+
+                                {% endblock%}
+
+                                <div class="todo" >
+                                
+                                {% for todo in todos %}
+                                <div class="todo-items" >
+                                    <P >{{todo.task}}</P>
+                                    <P style="font-size: 13px;">{{todo.desc}}</p>
+                                    
+                                    <p style="font-size: 10px; margin: 0;">
+                                        <span>{{todo.date}} {{todo.time}}</span>
+                                        <span style="color: rgb(146, 224, 29);">{{todo.category}}</span>
+                                        <span style="color: rgb(206, 161, 169);">{{todo.priority}}</span>
+                                    </P>                                               
+                                
+
+                                    {% if todo.complete == False %}
+                                        <span style="color: red;">Not completed</span>
+                                    {% else %} 
+                                        <span style="color: green;">completed</span>
+                                    {% endif %}
+            
+                                    <a href="{{ url_for('update', todo_id=todo.id) }}" style="background-color: rgb(88, 9, 88); color: rgb(210, 202, 202);">Update</a>
+                                    <a href="{{ url_for('delete', todo_id=todo.id) }}" style="background-color: red; color: black; ">Delete</a>
+                                    <a href="{{ url_for('edit', todo_id=todo.id) }}"  style="background-color: green; color: black;" >Edit</a>
+                                    </div>
+                                {% endfor %}
+                             </div>
+                    </div>
+                    <!--Output display-->
+                </div>
+                
+                   
+             
+            </section>
+           
+            <!--  End of My Tasks section-->
+
+             <!-- Today section-->
+             <section class="today-section" id="today-link">
+                <div class="today-container">
+                    <h1>Today:</h1>
+                    <div class="today-input">
+                        
+                        <ul>
+                            {% for todo in today_todos %}
+                               <div class="todo-items">
+                                    <p>{{ todo.task}}</p>
+                                    <p> {{ todo.desc}} </p>
+                                    <p style="font-size: 10px; margin: 0;">
+                                        <span>{{todo.date}} {{todo.time}}</span>
+                                        <span style="color: rgb(146, 224, 29);">{{todo.category}}</span>
+                                        <span style="color: rgb(206, 161, 169);">{{todo.priority}}</span>
+                                    </P>
+
+                                    {% if todo.complete == False %}
+                                    <span style="color: red;">Not completed</span>
+                                {% else %} 
+                                    <span style="color: green;">completed</span>
+                                {% endif %}
+        
+                                <a href="{{ url_for('update', todo_id=todo.id) }}" style="background-color: rgb(88, 9, 88); color: rgb(210, 202, 202);">Update</a>
+                                <a href="{{ url_for('delete', todo_id=todo.id) }}" style="background-color: red; color: black; ">Delete</a>
+                                <a href="{{ url_for('edit', todo_id=todo.id) }}"  style="background-color: green; color: black;" >Edit</a>
+                               </div>
+                            {% endfor %}
+                        </ul>
+                       
+                    </div>
+                </div>
+                
+            </section>
+            <!--  End of Today section-->
+            <!-- Upcoming section -->
+            <section class="upcoming-section" id="upcoming">
+                <div class="upcoming-container">
+                    <h1>Upcoming:</h1>
+                    <div class="upcoming-input">
+                        
+                        <ul>
+                            {% for todo in upcoming_todos %}
+                            <div class="todo-items" style="width: 100%;">
+                                
+                                    <p>{{ todo.task}}</p>
+                                    <p> {{ todo.desc}}</p>
+                                    <p style="font-size: 10px; margin: 0;">
+                                        <span>Due on - {{todo.date}} {{todo.time}}</span>
+                                        <span style="color: rgb(146, 224, 29);">{{todo.category}}</span>
+                                        <span style="color: rgb(206, 161, 169);">{{todo.priority}}</span>
+                                    </P>
+                                        
+                                    {% if todo.complete == False %}
+                                        <span style="color: red;">Not completed</span>
+                                    {% else %} 
+                                        <span style="color: green;">completed</span>
+                                    {% endif %}
+            
+                                    <a href="{{ url_for('update', todo_id=todo.id) }}" style="background-color: rgb(88, 9, 88); color: rgb(210, 202, 202);">Update</a>
+                                    <a href="{{ url_for('delete', todo_id=todo.id) }}" style="background-color: red; color: black; ">Delete</a>
+                                    <a href="{{ url_for('edit', todo_id=todo.id) }}"  style="background-color: green; color: black;" >Edit</a>
+                            </div>
+                            {% endfor %}
+                        </ul>
+                       
+                    </div>
+                </div>
+                
+            </section>
+            
+            <!-- End of upcoming section-->
+
+             <!-- Upcoming section -->
+             <section class="calendar-section" id="Overdue">
+                <div class="Overdue-container">
+                    <h1>Overdue:</h1>
+                    <div class="upcoming-input">
+                        
+                        <ul>
+                            {% for todo in due_tasks %}
+                            <div class="todo-items" style="width: 100%;">
+                                
+                                    <p>{{ todo.task}}</p>
+                                    <p> {{ todo.desc}}</p>
+                                    
+                                    <p style="font-size: 10px; margin: 0">
+                                        <span>{{todo.date}} {{todo.time}}</span>
+                                        <span style="color: rgb(146, 224, 29);">{{todo.category}}</span>
+                                        <span style="color: rgb(206, 161, 169);">{{todo.priority}}</span>
+                                    </P>
+
+                                {% if todo.complete == False %}
+                                    <span style="color: red;">Not completed</span>
+                                {% else %} 
+                                    <span style="color: green;">completed</span>
+                                {% endif %}
+        
+                                <a href="{{ url_for('update', todo_id=todo.id) }}" style="background-color: rgb(88, 9, 88); color: rgb(210, 202, 202);">Update</a>
+                                <a href="{{ url_for('delete', todo_id=todo.id) }}" style="background-color: red; color: black; ">Delete</a>
+                                <a href="{{ url_for('edit', todo_id=todo.id) }}"  style="background-color: green; color: black;" >Edit</a>
+                            </div>
+                            {% endfor %}
+                        </ul>
+                       
+                    </div>
+                </div>
+                
+            </section>
+            
+            <!-- End of calendar section-->
+            <!-- End of output section-->
+             
+            <!-- Aside section-->
+            <aside class="aside">
+                <h3>Task:</h3>
+                <div class="task-container">
+                   <form action="add" method="post" id="remainder-form">
+                        <input type="text" class="task-title" id="task-field" name="title" placeholder="Task title" required> 
+                        <textarea  id="desc-field" name="desc" placeholder="Description" required></textarea>
+                        <div class="cat-div">
+                            <label for="priority" class="priority">Priority</label> 
+                            <select name="priority" id="priority" required>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select> <br>
+                            <label for="category" class="category">Category</label> 
+                            <select name="category" id="category" required>
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                            </select> <br>
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" required>
+                            <label for="time">Time:</label>
+                            <input type="time" id="time" name="time" required>
+                            <div class="edel-btn">
+                                <button type="submit"  class="save-btn">Save</button>
+                                <a href="{{ url_for('index') }}" class="exit">Exit</a>
+                            </div>
+                      </div>
+                    </form>
+                </div>
+            </aside>
+            <!-- End of aside section-->
+        </main>
+
+            
+
+        <script src="{{ url_for('static', filename='/js/main.js') }}"></script>
+         
+        
+
+    </body>
+
+</html>
+

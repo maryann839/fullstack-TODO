@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Edit Todo</title>
+</head>
+<body>
+    <!-- A html page for editing tasks-->
+    <main>
+        <section>
+            <div>
+                <h2>Edit:</h2>
+                <form method="post" action="{{ url_for('edit', todo_id=todo.id) }}">
+                   <label for="title">Task Title:</label>
+                   <input type="text" id="title" name="task-title" value="{{ todo.task }}">
+                   <br>
+                   <label for="descrip">Description:</label>
+                   <textarea name="task-desc" id="desc"> {{ todo.desc }}</textarea>
+                                       
+                   <br>
+                   <button type="submit">Save</button>
+                   <a href="{{ url_for('index') }}" class="cancel">Cancel</a>
+                </form>
+                
+            </div>
+        </section>
+    </main>
+    
+    
+</body>
+</html>

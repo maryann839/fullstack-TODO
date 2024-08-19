@@ -1,0 +1,40 @@
+<!-- Jinja template was used to inhenrit from inde.html-->
+{% extends 'index.html' %}
+
+{% block content %}
+    <!-- Check if the A Searched variable exist-->
+    {% if Searched %}
+        <div class="todo">
+            <!-- Display what was searched-->
+            <h4>Searched for"{{ Searched}}"</h4>
+            <!-- check for a variable filtered todos -->
+            {% if filtered_todos %}
+                <!-- check for each todo in filtered todos -->
+                {% for todo in filtered_todos %}
+                    <!-- for each todo in filtered todos, display this -->
+                    <div class="todo-items" >
+                        <P >{{todo.task}}</P>
+                        <P style="font-size: 13px;">{{todo.desc}}</p>
+                        <p style="font-size: 10px; margin: 0;">
+                            <span>{{todo.date}} {{todo.time}}</span>
+                            <span style="color: rgb(146, 224, 29);">{{todo.category}}</span>
+                            <span style="color: rgb(206, 161, 169);">{{todo.priority}}</span>
+                        </P>                                               
+                        {% if todo.complete == False %}
+                            <span style="color: red;">Not completed</span>
+                        {% else %} 
+                            <span style="color: green;">completed</span>
+                        {% endif %}
+
+                        <a href="{{ url_for('update', todo_id=todo.id) }}" style="background-color: rgb(88, 9, 88); color: rgb(210, 202, 202);">Update</a>
+                        <a href="{{ url_for('delete', todo_id=todo.id) }}" style="background-color: red; color: black; ">Delete</a>
+                        <a href="{{ url_for('edit', todo_id=todo.id) }}"  style="background-color: green; color: black;" >Edit</a>
+                        </div>
+                {% endfor %}
+            {% else%}
+                 <p>Not found</p>
+            {% endif %}
+        <a href="{{ url_for('index') }}"  class="cancel">Cancel</a>
+        </div>     
+   {% endif %}
+{% endblock %}
